@@ -108,7 +108,7 @@ const CreateDstMc = ({ goBack, setLoader, user, setNotify }) => {
             if (currentIti && reqData.iti_id) {
               createDstMc(reqData).then((res) => {
                 if(res.errors && res.errors.length > 0) {
-                  setNotify({ message: res.errors[0].message, type: 'error' });
+                  setNotify({ message: 'DST MC for this batch, trade, industry combination is already created.', type: 'error' });
                 }else{
                   setNotify({ message: 'Form Created Successfully', type: 'success' });
                 }
