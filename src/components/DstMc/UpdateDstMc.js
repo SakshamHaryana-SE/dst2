@@ -153,7 +153,7 @@ const [selectedIndustry,setSelectedIndustry] = useState(null);
       itiId: currentITI
     };
     const {data: {dst_mc_meeting}} = await getFilteredTrades(reqData);
-    const list = dst_mc_meeting.map((item) => item.trade);
+    const list = dst_mc_meeting.map((item) => item.trade).filter((item, index, self) => self.indexOf(item) === index);
     setTrades(list);
   };
 
@@ -165,7 +165,7 @@ const [selectedIndustry,setSelectedIndustry] = useState(null);
     setSelectedTrade(value);
     const {data: {dst_mc_meeting}} = await getFilteredBatch(reqData);
     localStorage.setItem("dstId",dst_mc_meeting[0].id);
-    const list = dst_mc_meeting.map((item) => item.batch);
+    const list = dst_mc_meeting.map((item) => item.batch).filter((item, index, self) => self.indexOf(item) === index);
     setBatches(list);
     setFilteredIndustries([]);
   };
@@ -177,7 +177,7 @@ const [selectedIndustry,setSelectedIndustry] = useState(null);
       batch: value
     };
     const {data: {dst_mc_meeting}} = await getFilteredIndustry(reqData);
-    const list = dst_mc_meeting.map((item) => item.industry);
+    const list = dst_mc_meeting.map((item) => item.industry).filter((item, index, self) => self.indexOf(item) === index);
     setFilteredIndustries(list);
     setSelectedFilteredIndustry('');
   };
