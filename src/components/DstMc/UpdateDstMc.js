@@ -56,7 +56,7 @@ const [selectedIndustry,setSelectedIndustry] = useState(null);
     await updateFileUrl(updateForm.ex_file_widget,id,"FORM_UPDATE");
   };
   async function afterFormSubmit  (e) {
-    const data = JSON.parse(e.data);
+    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
     try {
       /* message = {
         nextForm: "formID",
@@ -125,13 +125,24 @@ const [selectedIndustry,setSelectedIndustry] = useState(null);
     setIndustries(data.data.industry);
   };
 
+  const eventTriggered = (e) => {
+    console.log('event triggered with data in create', e);
+     afterFormSubmit(e); 
+    };
   const bindEventListener = () => {
-    window.addEventListener('message', (e) => {afterFormSubmit(e);});
+    window.addEventListener('message', eventTriggered);
+  };
+  const detachEventBinding = () => {
+    window.removeEventListener('message',eventTriggered);
   };
 
   useEffect(() => {
     bindEventListener();
+    return ()=>{
+      detachEventBinding();
+    };
   }, [industries]);
+
 
   useEffect(() => {
     fetchITIsList();

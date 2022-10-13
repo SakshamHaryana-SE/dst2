@@ -33,7 +33,7 @@ const CreateDstMc = ({ goBack, setLoader, user, setNotify }) => {
   const [encodedFormURI, setEncodedFormURI] = useState(getFormURI(formId, formSpec.forms[formId].onSuccess, formSpec.forms[formId].prefill));
 
   function afterFormSubmit (e) {
-    const data = JSON.parse(e.data);
+    const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
     try {
       /* message = {
         nextForm: "formID",
@@ -42,6 +42,7 @@ const CreateDstMc = ({ goBack, setLoader, user, setNotify }) => {
       */
       const { nextForm, formData, onSuccessData, onFailureData } = data;
       if (data.state == 'ON_FORM_SUCCESS_COMPLETED') {
+        // debugger;
         let reqData = [];
         if (Array.isArray(formData.Create_DSTMC.MC_Information)) {
           reqData = formData.Create_DSTMC.MC_Information.map((item) => {
@@ -80,9 +81,10 @@ const CreateDstMc = ({ goBack, setLoader, user, setNotify }) => {
           }
         }
         else {
-          const industryId = industries.find((industry) => industry.name == formData?.Create_DSTMC?.MC_Information.industry_partner1).id;
+          const industryId = industries.find((industry) => industry.name == formData?.Create_DSTMC?.MC_Information.industry_partner1)?.id;
           if (!industryId) {
             reqData = {};
+            setNotify({ message: 'Submission failed, Industry not found in database.', type: 'error' });
           } else {
             reqData = {
               "iti_id": currentIti,
@@ -119,18 +121,18 @@ const CreateDstMc = ({ goBack, setLoader, user, setNotify }) => {
           }
         }
       }
-      if (nextForm.type === 'form') {
+      if (nextForm?.type === 'form') {
         setFormId(nextForm.id);
         setOnFormSuccessData(onSuccessData);
         setOnFormFailureData(onFailureData);
         setEncodedFormSpec(encodeURI(JSON.stringify(formSpec.forms[formId])));
         setEncodedFormURI(getFormURI(nextForm.id, onSuccessData, formSpec.forms[nextForm.id].prefill));
-      } else {
-        window.location.href = nextForm.url;
+      } else if(nextForm){
+        window.location.href = nextForm?.url;
       }
     }
     catch (e) {
-      // console.log(e)
+      // console.log(e);
     }
   }
 
@@ -160,13 +162,24 @@ const CreateDstMc = ({ goBack, setLoader, user, setNotify }) => {
     setIndustries(data.data.industry);
   };
 
+  const eventTriggered = (e) => {
+    console.log('event triggered with data in create', e);
+     afterFormSubmit(e); 
+    };
   const bindEventListener = () => {
-    window.addEventListener('message', (e) => { afterFormSubmit(e); });
+    window.addEventListener('message', eventTriggered);
+  };
+  const detachEventBinding = () => {
+    window.removeEventListener('message',eventTriggered);
   };
 
   useEffect(() => {
     bindEventListener();
+    return ()=>{
+      detachEventBinding();
+    };
   }, [industries]);
+
 
   useEffect(() => {
     fetchITIsList();

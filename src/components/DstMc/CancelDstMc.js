@@ -58,7 +58,7 @@ const CancelDstMc = ({ goBack, setLoader, user, setNotify }) => {
     const res2 = await updateFileUrl(updateForm.ex_file_widget,id,"FORM_CANCEL");
   };
   function afterFormSubmit (e) {
-    const data = JSON.parse(e.data);
+    const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
     try {
       /* message = {
         nextForm: "formID",
@@ -118,17 +118,35 @@ const CancelDstMc = ({ goBack, setLoader, user, setNotify }) => {
     setIndustries(data.data.industry);
   };
 
+  // const bindEventListener = () => {
+  //   window.removeEventListener('message', (e) => {afterFormSubmit(e);});
+  //   window.setTimeout(() => {
+  //     window.addEventListener('message', (e) => {afterFormSubmit(e);});
+  //   }, 1500);
+  // };
+
+  // useEffect(() => {
+  //   bindEventListener();
+  //   return ()=>{
+
+  //   }
+  // }, [selectedFilteredIndustry]);
+  const eventTriggered = (e) => {
+     afterFormSubmit(e); 
+  };
   const bindEventListener = () => {
-    window.removeEventListener('message', (e) => {afterFormSubmit(e);});
-    window.setTimeout(() => {
-      window.addEventListener('message', (e) => {afterFormSubmit(e);});
-    }, 1500);
+    window.addEventListener('message', eventTriggered);
+  };
+  const detachEventBinding = () => {
+    window.removeEventListener('message',eventTriggered);
   };
 
   useEffect(() => {
     bindEventListener();
+    return ()=>{
+      detachEventBinding();
+    };
   }, [selectedFilteredIndustry]);
-
   useEffect(() => {
     fetchITIsList();
     fetchUserDetails();
