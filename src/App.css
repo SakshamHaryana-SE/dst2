@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.Toastify__toast-theme--colored.Toastify__toast--success {
+    background-color: #0d9488 !important;
+}

@@ -35,6 +35,8 @@ const TraineeLogin = ({ setUser, setTrainee }) => {
       }
     });
   }, []);
+
+  console.log(`${process.env.REACT_APP_ENKETO}/preview?xform=${process.env.REACT_APP_GET_FORM}/getForm/enrollment&id=enrollment&triggers=${triggers}`);
   return (
     <>
       <Header />
@@ -47,6 +49,7 @@ const TraineeLogin = ({ setUser, setTrainee }) => {
         title="Enrollment"
         allow="geolocation"
         width="100%"
+        height="50%"
         style={{ display: 'flex', flexGrow: 1 }}
       />
     </>

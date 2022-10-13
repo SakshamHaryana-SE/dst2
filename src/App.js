@@ -6,7 +6,7 @@ class App extends PureComponent {
     const { component } = this.props;
 
     return (
-      <div>
+      <div className='h-screen'>
         {component}
         <Footer />
       </div>

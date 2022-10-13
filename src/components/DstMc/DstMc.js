@@ -14,9 +14,10 @@ const DstMc = ({ goBack, setGoBack }) => {
     browserHistory.push('/create-dst-mc');
   };
 
+
   return (
     <div>
-      <Header />
+      <Header/>
       <div className="m-10 text-teal-800 text-center">
         <h2 className="header-text-color">Please select one option to proceed</h2>
       </div>
