@@ -1,7 +1,7 @@
 import base64 from 'base-64';
-import {OTP_API_URL, HTTP_BASIC_USER, HTTP_BASIC_PASS, API_KEY, HASURA_QUERY_URL, API_BASE_URL, APPLICATION_ID} from '../common/config';
+import { OTP_API_URL, HTTP_BASIC_USER, HTTP_BASIC_PASS, API_KEY, HASURA_QUERY_URL, API_BASE_URL, APPLICATION_ID } from '../common/config';
 import { store } from '../redux/store';
-import {loaderSet, notifySet, userSet} from '../redux/actions';
+import { loaderSet, notifySet, userSet } from '../redux/actions';
 import { queryString, userLogout } from '../common/globals';
 import moment from "moment";
 
@@ -36,7 +36,7 @@ const handleNetworkError = async (responseError) => {
 
 
 const generateHasuraAPI = async (query) => {
-  if(store.getState().user?.user?.tokenExpirationInstant < +new Date()){
+  if (store.getState().user?.user?.tokenExpirationInstant < +new Date()) {
     const reqData = {
       "token": store.getState().user?.user?.token,
       "refreshToken": store.getState().user?.user?.refreshToken
@@ -54,11 +54,11 @@ const generateHasuraAPI = async (query) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${store.getState().user?.user?.token}`,
+      Authorization: `Bearer ${store.getState().user?.user?.token || 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InVGRnE4dHU5aEdxaXpUOHk2QzY1U3hKbGd4YyJ9.eyJhdWQiOiI4OTI0ZDZjNS1kZTMzLTRiNDYtOTllMi05ZDc1MDJmNzI5MzYiLCJleHAiOjIwMjUyMTkwOTEsImlhdCI6MTY2NTIxOTA5MSwiaXNzIjoiYWNtZS5jb20iLCJzdWIiOiJkODFiMTI3MS04MzE4LTQ5OWEtOGRkOS0xMTYzOTBlM2E3YWIiLCJqdGkiOiJmOTBmNjQwNi04YzRkLTRkYzUtYWM4ZS1jMDBiMjA4ZjBlYzUiLCJhdXRoZW50aWNhdGlvblR5cGUiOiJQQVNTV09SRCIsInByZWZlcnJlZF91c2VybmFtZSI6IkRTVC1TdWJtaXQtQXR0ZW5kYW5jZSIsImFwcGxpY2F0aW9uSWQiOiI4OTI0ZDZjNS1kZTMzLTRiNDYtOTllMi05ZDc1MDJmNzI5MzYiLCJyb2xlcyI6W10sImF1dGhfdGltZSI6MTY2NTIxOTA5MSwidGlkIjoiYTcxMzdkZWQtNmY1NS0xMGE4LTZmNWItZjc2ZGJkNzlhZTYwIiwiaHR0cHM6Ly9oYXN1cmEuaW8vand0L2NsYWltcyI6eyJ4LWhhc3VyYS1hbGxvd2VkLXJvbGVzIjpbInN1Ym1pdC1hdHRlbmRhbmNlIiwiSVRJIl0sIngtaGFzdXJhLWRlZmF1bHQtcm9sZSI6InN1Ym1pdC1hdHRlbmRhbmNlIn19.Hc5N68Vx6AC-nI3yPBlALHWqUQ0RlkYXfPByjSoAB0Yw3MJuIFnIs1WY44zgoXl_9BFb0i__JwTWDlvwOlkme23ryyeghRMHHWntYeziK5OG9scm3AH8vVz1hMGEbNixRrWY1Gobb54zDqxz_hlzUhM817wG7X0cht3lzaa-2V1meUKqscsDugQLMzkEtBBMU6NmuzGceSDUXArgFOHawXQSjeJ098SgrJ5HJ_6u7tYCXK8fSLfxMuyf4mgKAIwYZxtKxp3wFqiBzk2CNixVdmi7yXK21QJnmDI99jaBhy4l_Ph1MNLPnZaS3BorRozPZ8cCAaxHuOPhKjXEADEnVw'}`,
     },
     body: JSON.stringify(query)
   }).then(async (response) => await validateResponse(response))
-      .catch((error) => handleNetworkError(error));
+    .catch((error) => handleNetworkError(error));
 };
 
 export const RefreshToken = async (data) => {
@@ -72,14 +72,14 @@ export const RefreshToken = async (data) => {
     },
     body: JSON.stringify(data)
   });
-  const {result: {user}} = await validateResponse(res);
-  if(user.token){
+  const { result: { user } } = await validateResponse(res);
+  if (user.token) {
     const localUser = store.getState().user;
     localUser.user.token = user.token;
     localUser.user.refreshToken = user.refreshToken;
     localUser.user.tokenExpirationInstant = user.tokenExpirationInstant;
     store.dispatch(userSet(localUser));
-  }else{
+  } else {
     throw new Error('unable to set new token');
   }
 };
@@ -114,7 +114,7 @@ export const ITIlogin = (data) => fetch(`${API_BASE_URL}/login/pin`, {
   },
   body: JSON.stringify(data)
 }).then(async (response) => await validateResponse(response))
-    .catch((error) => handleNetworkError(error));
+  .catch((error) => handleNetworkError(error));
 
 export const ResetPIN = (data) => fetch(`${API_BASE_URL}/changePin`, {
   method: 'POST',
@@ -126,7 +126,7 @@ export const ResetPIN = (data) => fetch(`${API_BASE_URL}/changePin`, {
   },
   body: JSON.stringify(data)
 }).then(async (response) => await validateResponse(response))
-    .catch((error) => handleNetworkError(error));
+  .catch((error) => handleNetworkError(error));
 
 
 
@@ -139,7 +139,7 @@ export const getAcademicCalendarLinks = (data) => {
         created_at
       }
     }`,
-    "variables": {name: data.itiName}
+    "variables": { name: data.itiName }
   };
   return generateHasuraAPI(query);
 };
@@ -155,7 +155,7 @@ export const getLoggedInITIDetails = (data) => {
         contact_number
       }
     }`,
-    "variables": {name: data.itiName}
+    "variables": { name: data.itiName }
   };
   return generateHasuraAPI(query);
 };
@@ -197,7 +197,7 @@ export const createDstMc = (data) => {
         }
       }
     }`,
-    "variables": {objects: data}
+    "variables": { objects: data }
   };
   return generateHasuraAPI(query);
 };
@@ -211,7 +211,7 @@ export const updateDstMc = (data) => {
         id
       }
     }`,
-    "variables": {id: data.id, industry_id: data.industryId}
+    "variables": { id: data.id, industry_id: data.industryId }
   };
   return generateHasuraAPI(query);
 };
@@ -223,7 +223,7 @@ export const deleteDstMc = (data) => {
         id
       }
     }`,
-    "variables": {id: data.id}
+    "variables": { id: data.id }
   };
   return generateHasuraAPI(query);
 };
@@ -249,7 +249,7 @@ export const getFilteredTrades = (data) => {
         trade
       }
     }`,
-    "variables": {iti_id: data.itiId}
+    "variables": { iti_id: data.itiId }
   };
   return generateHasuraAPI(query);
 };
@@ -274,7 +274,7 @@ export const getFilteredBatch = (data) => {
         trade
       }
     }`,
-    "variables": {iti_id: data.itiId, trade: data.trade}
+    "variables": { iti_id: data.itiId, trade: data.trade }
   };
   return generateHasuraAPI(query);
 };
@@ -299,29 +299,29 @@ export const getFilteredIndustry = (data) => {
         trade
       }
     }`,
-    "variables": {iti_id: data.itiId, trade: data.trade, batch: data.batch}
+    "variables": { iti_id: data.itiId, trade: data.trade, batch: data.batch }
   };
   return generateHasuraAPI(query);
 };
 
-export const createNewIndustry = (name,district) => {
+export const createNewIndustry = (name, district) => {
 
   const query = {
-    query : `mutation InsertIndustry($name: String = "", $latitude: Float = 0.0, $longitude: Float = 0.0, $district: String = "", $added_by_form: Boolean = true) {
+    query: `mutation InsertIndustry($name: String = "", $latitude: Float = 0.0, $longitude: Float = 0.0, $district: String = "", $added_by_form: Boolean = true) {
   insert_industry_one(object: {name: $name, latitude: $latitude, longitude: $longitude, district: $district, added_by_form: $added_by_form}) {
     id
     name
   }
 }`,
-    "variables":{name,district}
+    "variables": { name, district }
   };
   return generateHasuraAPI(query);
 };
 
-export const updateDataRelativeToIndustryId  = (data,industry,a) => {
+export const updateDataRelativeToIndustryId = (data, industry, a) => {
   const obj = {
-    id:parseInt(a),
-    industry_id:industry?.id,
+    id: parseInt(a),
+    industry_id: industry?.id,
     trainer_name: data.trainer_name,
     trainer_email: data.trainer_email,
     trainer_contact: data.trainer_contact,
@@ -333,7 +333,7 @@ export const updateDataRelativeToIndustryId  = (data,industry,a) => {
     sup_contact: data.sup_Contact
   };
   const query = {
-    query:`mutation MyMutation($id: bigint = "", $industry_id: Int, $trainer_name: String, $trainer_email: String, $trainer_contact: String, $head_name: String, $head_email: String, $head_contact: String, $sup_name: String, $sup_email: String, $sup_contact: String) {
+    query: `mutation MyMutation($id: bigint = "", $industry_id: Int, $trainer_name: String, $trainer_email: String, $trainer_contact: String, $head_name: String, $head_email: String, $head_contact: String, $sup_name: String, $sup_email: String, $sup_contact: String) {
   update_dst_mc_meeting_by_pk(pk_columns: {id: $id}, _set: {industry_id: $industry_id, trainer_name: $trainer_name, trainer_email: $trainer_email, trainer_contact: $trainer_contact, head_name: $head_name, head_email: $head_email, head_contact: $head_contact, sup_name: $sup_name, sup_email: $sup_email, sup_contact: $sup_contact}) {
        industry_id
     id
@@ -364,17 +364,17 @@ export const updateDataRelativeToIndustryId  = (data,industry,a) => {
   return generateHasuraAPI(query);
 };
 
-export const updateFileUrl  = (url,a,t) => {
+export const updateFileUrl = (url, a, t) => {
 
   const obj = {
-    dst_mc_meeting_id:parseInt(a),
-    type:t,
-    file_url:url,
-    old_data_json:{},
-    new_data_json:{}
+    dst_mc_meeting_id: parseInt(a),
+    type: t,
+    file_url: url,
+    old_data_json: {},
+    new_data_json: {}
   };
   const query = {
-    query:`mutation UploadDocument($dst_mc_meeting_id: bigint, $type: String, $file_url: String, $new_data_json: jsonb = "{}", $old_data_json: jsonb = "{}") {
+    query: `mutation UploadDocument($dst_mc_meeting_id: bigint, $type: String, $file_url: String, $new_data_json: jsonb = "{}", $old_data_json: jsonb = "{}") {
   insert_dst_mc_meeting_uploads_one(object: {dst_mc_meeting_id: $dst_mc_meeting_id, type: $type, file_url: $file_url, new_data_json: $new_data_json, old_data_json: $old_data_json}) {
     id
     dst_mc_meeting_id
@@ -388,14 +388,14 @@ export const updateFileUrl  = (url,a,t) => {
   };
   return generateHasuraAPI(query);
 };
-export const cancelDSTMC  = (data,a) => {
+export const cancelDSTMC = (data, a) => {
   const localtime = moment().format("YYYY-MM-DD h:mm:ss");
   const obj = {
-    id:parseInt(a),
-    deleted_at:localtime
+    id: parseInt(a),
+    deleted_at: localtime
   };
   const query = {
-    query:`mutation MyMutation($id: bigint!, $deleted_at: timestamptz) {
+    query: `mutation MyMutation($id: bigint!, $deleted_at: timestamptz) {
   update_dst_mc_meeting_by_pk(pk_columns: {id: $id}, _set: {deleted_at: $deleted_at}) {
     industry_id
     id
@@ -423,6 +423,25 @@ export const cancelDSTMC  = (data,a) => {
   }
 }`,
     "variables": obj
+  };
+  return generateHasuraAPI(query);
+};
+
+export const getTraineeAttendance = (data) => {
+  const query = {
+    query: `query ($trainee_id: Int, $start_date: date, $end_date: date, $limit: Int, $offset: Int) {
+      attendance(where: {trainee_id: {_eq: $trainee_id}, _and: {date: {_gte: $start_date}, _and: {date: {_lte: $end_date}}}}, order_by: {date: desc}, limit: $limit, offset: $offset) {
+        date,
+        is_present
+      }
+    }`,
+    "variables": {
+      trainee_id: data.trainee_id,
+      start_date: data.start_date,
+      end_date: data.end_date,
+      limit: data.limit,
+      offset: data.offset
+    }
   };
   return generateHasuraAPI(query);
 };

@@ -20,7 +20,7 @@ const TraineeRegistration = () => {
           setTimeout(() => {
             storeUser(response);
             localStorage.setItem('traineeId', decoded.traineeId);
-            browserHistory.push('/trainee');
+            browserHistory.push('/trainee-options');
           }, 1000);
         } else if (decoded.channel === 'traineeRegistration') {
           alert('Could not Register User');

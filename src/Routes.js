@@ -29,6 +29,8 @@ import ResetPassword from "./components/ITI/ResetPassword";
 import DstMcOptions from "./components/DstMc/DstMcOptions";
 import UpdateDstMc from "./components/DstMc/UpdateDstMc";
 import CancelDstMc from "./components/DstMc/CancelDstMc";
+import TraineeOptions from './pages/TraineeOptions';
+import ViewTraineeAttendance from './components/Trainee/ViewTraineeAttendance';
 
 class Routes extends PureComponent {
   // eslint-disable-next-line class-methods-use-this
@@ -36,7 +38,7 @@ class Routes extends PureComponent {
     const user = await getUser();
 
     if (!isEmpty(user) && user !== null) {
-      browserHistory.push('/trainee');
+      browserHistory.push('/trainee-options');
     }
     window.scrollTo(0, 0);
   };
@@ -60,7 +62,9 @@ class Routes extends PureComponent {
               <Route exact path="/" components={{ component: Home }} onEnter={this.checkAuth} />
               <Route exact path="/principal-login" components={{ component: PrincipalLogin }} />
               <Route exact path="/trainee-login" components={{ component: TraineeLogin }} onEnter={this.checkAuth} />
-              <Route exact path="/trainee" components={{ component: TraineeDetail }} onEnter={this.requireAuth} />
+              <Route exact path="/trainee-options" components={{ component: TraineeOptions }} onEnter={this.requireAuth} />
+              <Route exact path="/trainee-record-attendance" components={{ component: TraineeDetail }} onEnter={this.requireAuth} />
+              <Route exact path="/trainee-view-attendance" components={{ component: ViewTraineeAttendance }} onEnter={this.requireAuth} />
               <Route exact path="/verify-otp" components={{ component: Otp }} onEnter={this.checkAuth} />
               <Route exact path="/welcome" components={{ component: Welcome }} />
               <Route exact path="/iti-login" components={{ component: ITILogin }} />

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import Footer from './components/Footer';
+import 'animate.css';
 
 class App extends PureComponent {
   render() {
