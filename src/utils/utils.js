@@ -304,6 +304,31 @@ export const getFilteredIndustry = (data) => {
   return generateHasuraAPI(query);
 };
 
+export const getFilteredDSTData = (data) => {
+  const query = {
+    query: `query ($iti_id: Int, $trade: String, $batch: String, $industry_id: Int) {
+      dst_mc_meeting(where: {iti_id: {_eq: $iti_id}, trade: {_eq: $trade}, batch: {_eq: $batch}, industry_id: {_eq: $industry_id}, deleted_at: {_is_null: true}}) {
+        id
+        district
+        iti_id
+        iti {
+          id
+          name
+        }
+        industry {
+          id
+          name
+          district
+        }
+        batch
+        trade
+      }
+    }`,
+    "variables": { iti_id: data.itiId, trade: data.trade, batch: data.batch, industry_id: data.industryId }
+  };
+  return generateHasuraAPI(query);
+};
+
 export const createNewIndustry = (name, district) => {
 
   const query = {
@@ -442,6 +467,22 @@ export const getTraineeAttendance = (data) => {
       limit: data.limit,
       offset: data.offset
     }
+  };
+  return generateHasuraAPI(query);
+};
+
+export const getIndustryDetails = (id) => {
+  const query = {
+    query: `query ($id: Int) {
+      industry(where: {id: {_eq: $id}}) {
+        id
+        district
+        latitude
+        longitude
+        name
+      }
+    }`,
+    "variables": { id: id }
   };
   return generateHasuraAPI(query);
 };
