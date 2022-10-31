@@ -486,3 +486,33 @@ export const getIndustryDetails = (id) => {
   };
   return generateHasuraAPI(query);
 };
+
+export const getOjtAttendanceDetails = (data) => {
+  const query = {
+    query: `query ($batch: String, $iti: Int, $industry: Int, $tradeName: String, $fromDt: date, $toDt: date) {
+      q1: trainee(where: {batch: {_eq: $batch}, iti: {_eq: $iti}, industry: {_eq: $industry}, tradeName: {_ilike: $tradeName}}) {
+        id
+        name
+        registrationNumber
+        industry
+        iti
+         attendances_aggregate(where: {is_present: {_eq: true}, date: {_gte: $fromDt, _lte: $toDt}}) {
+          aggregate {
+            count(columns: is_present)
+          }
+        }
+      }
+      q2: trainee(where: {batch: {_eq: $batch}, iti: {_eq: $iti}, industry: {_eq: $industry}, tradeName: {_ilike: $tradeName}}) {
+         attendances_aggregate(where: {date: {_gte: $fromDt, _lte: $toDt}}) {
+          aggregate {
+            count(columns: is_present)
+          }
+        }
+      }
+    }
+    
+    `,
+    "variables": { batch: data.batch, iti: data.iti, industry: data.industry, tradeName: data.tradeName, fromDt: data.fromDt, toDt: data.toDt }
+  };
+  return generateHasuraAPI(query);
+};

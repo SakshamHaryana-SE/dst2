@@ -74,6 +74,12 @@ const ITIOptions = ({ goBack, setGoBack, setNotify, user }) => {
                 <span>View DST MC</span>
               </div>
             </div>
+            <div className="text-lg cursor-pointer" onClick={() => browserHistory.push('/view-ojt-attendance')}>
+              <div className="flex items-center lg:justify-center text-teal-700 ml-10 lg:ml-0">
+                <CalendarIcon className="w-2/12 sm:w-1/4 md:w-1/6 lg:w-1/12 xl:w-1/12 pr-3" aria-hidden="true" />
+                <span>View OJT Attendance</span>
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex items-center justify-center">

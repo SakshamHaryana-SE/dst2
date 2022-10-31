@@ -31,6 +31,8 @@ import UpdateDstMc from "./components/DstMc/UpdateDstMc";
 import CancelDstMc from "./components/DstMc/CancelDstMc";
 import TraineeOptions from './pages/TraineeOptions';
 import ViewTraineeAttendance from './components/Trainee/ViewTraineeAttendance';
+import ViewOJTAttendance from './components/OJT/ViewOJTAttendance';
+import OJTAttendanceTable from './components/OJT/OJTAttendanceTable';
 
 class Routes extends PureComponent {
   // eslint-disable-next-line class-methods-use-this
@@ -76,6 +78,8 @@ class Routes extends PureComponent {
                */}
               <Route exact path="/dst-mc" components={{ component: DstMc }} onEnter={this.requireAuth} />
               <Route exact path="/view-dst-mc" components={{ component: ViewDstMc }} />
+              <Route exact path="/view-ojt-attendance" components={{ component: ViewOJTAttendance }} />
+              <Route exact path="/view-ojt-attendance/:iti/:industry/:batch/:tradeName/:fromDt/:toDt" components={{ component: OJTAttendanceTable }} />
               <Route exact path="/create-dst-mc" components={{ component: CreateDstMc }} />
               <Route exact path="/trainer-options" components={{ component: TrainerOptions }} />
               <Route exact path="/principal-options" components={{ component: PrincipalOptions }} />
