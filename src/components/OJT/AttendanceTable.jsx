@@ -6,7 +6,7 @@ const AttendanceTable = ({ attendanceRecord, name }) => {
     const csvHeaders = [
         { label: "Name", key: "name" },
         { label: "Date", key: "date" },
-        { label: "Is Present", key: "is_present" }
+        { label: "Attendance", key: "is_present" }
     ];
 
     function getDate(_date) {
@@ -62,7 +62,7 @@ const AttendanceTable = ({ attendanceRecord, name }) => {
             {attendanceRecord.length > 0 && <div className='w-full flex justify-end'>
                 <CSVLink
                     data={attendanceRecord.map(el => {
-                        let temp = { ...el, name: name };
+                        let temp = { ...el, name: name, is_present: el.is_present ? "Present" : "Absent" };
                         return temp;
                     })}
                     className='bg-teal-800 px-4 py-2 text-white flex items-center text-lg my-8 cursor-pointer hover:bg-teal-900 hover:rounded-lg ease-in-out duration-200'
