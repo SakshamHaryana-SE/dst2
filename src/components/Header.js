@@ -13,10 +13,10 @@ const Header = ({
     getUser().then((data) => {
       setUser(data);
     });
-  });
+  }, []);
   return (
     <div className="sticky top-0 z-50">
-      <div className="flex flex-row h-10 w-full bg-teal-700 text-white text-center justify-center">
+      <div className="flex flex-row h-15 w-full bg-teal-700 text-white text-center justify-center">
         <div
           className="w-1/6 self-center pl-2"
           onClick={onBackButton === '' ? () => {
@@ -31,7 +31,18 @@ const Header = ({
             title !== '' && <span className="text-2xl" aria-hidden="true">{title}</span>
           }
         </div>
-        <div className="w-1/6 self-center pr-2"></div>
+        <div className="w-1/6 self-center pr-2"> {
+          (user !== undefined && user !== null && Object.keys(user).length > 0)
+          && (
+            <button
+              onClick={() => userLogout()}
+              type="button"
+              className="bg-teal-800 text-white px-5 py-3 text-lg w-auto"
+            >
+              Logout
+            </button>
+          )
+        }</div>
       </div>
       <div className="relative bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
@@ -57,18 +68,6 @@ const Header = ({
                 src={GoH}
                 alt=""
               />
-              {
-                (user !== undefined && user !== null && Object.keys(user).length > 0)
-                && (
-                  <button
-                    onClick={() => userLogout()}
-                    type="button"
-                    className="bg-teal-700 text-white p-2 text-lg w-auto"
-                  >
-                    Logout
-                  </button>
-                )
-              }
             </div>
           </div>
         </div>
