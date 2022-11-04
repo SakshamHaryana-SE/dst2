@@ -58,15 +58,6 @@ const ITIOptions = ({ goBack, setGoBack, setNotify, user }) => {
                     <OptionCard icon={<UserGroupIcon />} title={"View DST MC"} onClick={() => browserHistory.push('/view-dst-mc')} />
                     <OptionCard icon={<CalendarIcon />} title={"View OJT Attendance"} onClick={() => browserHistory.push('/view-ojt-attendance')} />
                 </div>
-                <div className="flex items-center justify-center lg:mt-20 mb-5">
-                    <button
-                        onClick={() => userLogout()}
-                        className="bg-teal-700 hover:bg-teal-500 text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
-                        type="button"
-                    >
-                        Logout
-                    </button>
-                </div>
             </div>
         </div>
     );
