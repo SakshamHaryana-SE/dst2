@@ -29,7 +29,7 @@ const TraineeDetail = () => {
   const traineeId = localStorage.getItem('traineeId');
   return (
     <>
-      <Header />
+      <Header onBackButton={() => browserHistory.goBack()} />
       <div className="m-10 text-xl font-bold text-teal-800 text-center">
         <h2 className="header-text-color">DST Trainee Attendance</h2>
       </div>

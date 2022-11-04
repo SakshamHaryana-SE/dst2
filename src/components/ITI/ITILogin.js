@@ -5,7 +5,7 @@ import withGoBack from '../../redux/HOC/withGoBack';
 import withLoader from '../../redux/HOC/withLoader';
 import withNotify from '../../redux/HOC/withNotify';
 import withUser from '../../redux/HOC/withUser';
-import { onGoBack } from '../../common/globals';
+import { onGoBack, storeUser } from '../../common/globals';
 import { renderField, required } from '../../helpers/form-validations';
 import { ITIlogin } from '../../utils/utils';
 import Header from '../Header';
@@ -37,6 +37,7 @@ const ITILogin = ({
       const { responseCode, message, result, params } = Res;
       if (responseCode === 'OK') {
         setUser({ ...result.data });
+        storeUser(result.data.user);
         setNotify({ message: 'Login successfully', type: 'success' });
         goBack.push(window.location.pathname);
         setGoBack(goBack);

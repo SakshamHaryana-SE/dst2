@@ -516,3 +516,27 @@ export const getOjtAttendanceDetails = (data) => {
   };
   return generateHasuraAPI(query);
 };
+
+export const getOptionsForOjtAttendance = (iti_id) => {
+  const query = {
+    query: `
+    query ($iti_id: Int) {
+      iti_industry_trade_batch_mapping(where: {iti_id: {_eq: $iti_id}}) {
+        batch
+        trade
+        industry {
+          attendances_aggregate {
+            aggregate {
+              count(columns: is_present)
+            }
+          }
+          id
+          name
+        }
+      }
+    }
+    `,
+    "variables": { iti_id: iti_id }
+  };
+  return generateHasuraAPI(query);
+};

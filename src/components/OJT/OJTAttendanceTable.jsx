@@ -19,7 +19,8 @@ const OJTAttendanceTable = (props) => {
     const csvHeaders = [
         { label: "Trainee Name", key: "name" },
         { label: "Registration Number", key: "registrationNumber" },
-        { label: "Aggregate Attendance", key: "aggAttendance" }
+        { label: "Days Present", key: "daysPresent" },
+        { label: "Total Days", key: "totalDays" }
     ];
     const { batch, fromDt, industry, iti, toDt, tradeName } = props.params;
 
@@ -120,7 +121,7 @@ const OJTAttendanceTable = (props) => {
             {tableData.q1 && <div className='w-full flex justify-end'>
                 <CSVLink
                     data={tableData.q1.map((el, i) => {
-                        const temp = { ...el, aggAttendance: `${el.attendances_aggregate.aggregate.count} out of ${tableData.q2[i].attendances_aggregate.aggregate.count}` };
+                        const temp = { ...el, daysPresent: el.attendances_aggregate.aggregate.count, totalDays: tableData.q2[i].attendances_aggregate.aggregate.count };
                         return temp;
                     })}
                     className='bg-teal-800 px-4 py-2 lg:mr-20 mr-2 text-white flex items-center text-lg my-8 cursor-pointer hover:bg-teal-900 hover:rounded-lg ease-in-out duration-200'

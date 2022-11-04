@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     ViewGridIcon, ClipboardListIcon, UserAddIcon, UserGroupIcon,
 } from '@heroicons/react/solid';
@@ -6,9 +6,9 @@ import { LocationMarkerIcon, CalendarIcon } from '@heroicons/react/outline';
 import { browserHistory } from 'react-router';
 import withGoBack from '../../redux/HOC/withGoBack';
 import Header from '../Header';
-import {getFilteredTrades, getITIsList, getFilteredBatch, getFilteredIndustry} from "../../utils/utils";
-import {onGoBack, userLogout} from '../../common/globals';
-import {isEmpty} from "lodash";
+import { getFilteredTrades, getITIsList, getFilteredBatch, getFilteredIndustry } from "../../utils/utils";
+import { onGoBack, userLogout } from '../../common/globals';
+import { isEmpty } from "lodash";
 import withNotify from "../../redux/HOC/withNotify";
 import withUser from "../../redux/HOC/withUser";
 
@@ -29,28 +29,28 @@ const DstMcOptions = ({ goBack, setGoBack, setNotify, user }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(selectedOption === 'create') {
+        if (selectedOption === 'create') {
             onNext('/create-dst-mc');
-        }else if(selectedOption === 'update') {
+        } else if (selectedOption === 'update') {
             onNext('/update-dst-mc');
-        } else if(selectedOption === 'cancel') {
+        } else if (selectedOption === 'cancel') {
             onNext('/cancel-dst-mc');
         }
     };
 
     return (
         <div>
-            <Header title="Create DST MC" onBackButton={onBack} />
+            <Header onBackButton={onBack} />
             <div className="p-2">
                 <div className="m-10 text-teal-800 text-center">
-                    <h2 className="header-text-color">DST MC Creation and Updation</h2>
+                    <h2 className="header-text-color font-bold">Forms for DST MC Creation, Cancellation and Updation</h2>
                 </div>
                 <div className="grid grid-cols-1 place-items-center mb-10">
                     <div className="flex flex-col gap-y-9">
                         <div>Please choose 'Create DSTMC' if you are creating a DST MC for the first time.
-                            <br/>
-                            Please choose 'Cancel DSTMC' if your MoU has been cancelled with the industry partner.
-                            <br/>
+                            <br />
+                            Please choose 'Raise MoU Cancel Request' if your MoU has been cancelled with the industry partner.
+                            <br />
                             Please choose 'Update existing DSTMC' if yout MoU has been cancelled with the industry partner and you have onboarded a new industry partner.
                         </div>
                         <form onSubmit={handleSubmit}>
@@ -58,27 +58,27 @@ const DstMcOptions = ({ goBack, setGoBack, setNotify, user }) => {
 
                             <div className="flex items-center my-4">
                                 <input id="create" type="radio" value="create" name="DstMcOption"
-                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                       checked={selectedOption === "create"}
-                                       onChange={onValueChange} />
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    checked={selectedOption === "create"}
+                                    onChange={onValueChange} />
                                 <label htmlFor="create"
-                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Create DSTMC</label>
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-600">Create DST MC</label>
                             </div>
                             <div className="flex items-center mb-4">
                                 <input id="cancel" type="radio" value="cancel" name="DstMcOption"
-                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                       checked={selectedOption === "cancel"}
-                                       onChange={onValueChange} />
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    checked={selectedOption === "cancel"}
+                                    onChange={onValueChange} />
                                 <label htmlFor="cancel"
-                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Cancel DSTMC</label>
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-600">Raise MoU Cancel Request</label>
                             </div>
                             <div className="flex items-center mb-4">
                                 <input id="update" type="radio" value="update" name="DstMcOption"
-                                       className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                       checked={selectedOption === "update"}
-                                       onChange={onValueChange} />
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                    checked={selectedOption === "update"}
+                                    onChange={onValueChange} />
                                 <label htmlFor="update"
-                                       className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Update Existing DSTMC</label>
+                                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-600">Update Existing DSTMC</label>
                             </div>
                             <div className="flex items-center justify-center mt-10">
                                 <button

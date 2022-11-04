@@ -7,7 +7,7 @@ import { getFilteredBatch, getFilteredDSTData, getFilteredIndustry, getFilteredT
 import withUser from '../../redux/HOC/withUser';
 import { CSVLink } from 'react-csv';
 import CommonModal from '../Common/Modal';
-
+import { browserHistory } from 'react-router';
 const csvHeaders = [
   { label: "District", key: "district" },
   { label: "ITI Name", key: "iti.name" },
@@ -27,10 +27,6 @@ const ViewDstMc = ({ goBack, user }) => {
   const [selectedIndsutry, setSelectedIndsutry] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
-
-  const onBack = () => {
-    onGoBack(goBack);
-  };
 
   const onTradesSelect = async (value) => {
     const reqData = {
@@ -111,7 +107,7 @@ const ViewDstMc = ({ goBack, user }) => {
           <p className='text-lg font-semibold py-2'>ID: {modalData.id}</p>
         </div>
       </CommonModal>}
-      <Header title="View DST MC" onBackButton={onBack} />
+      <Header title="View DST MC" onBackButton={() => browserHistory.goBack()} />
       <div className="grid grid-cols-3 gap-x-4 p-4 lg:mx-20">
         <select className="form-select appearance-none p-3 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-teal-800 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
           name="trade"

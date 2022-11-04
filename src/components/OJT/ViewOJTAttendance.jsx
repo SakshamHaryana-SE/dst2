@@ -3,86 +3,44 @@ import { DocumentDownloadIcon, } from '@heroicons/react/solid';
 import withGoBack from '../../redux/HOC/withGoBack';
 import Header from '../Header';
 import { onGoBack } from "../../common/globals";
-import { getFilteredBatch, getFilteredDSTData, getFilteredIndustry, getFilteredTrades, getIndustryDetails, getITIsList, getOjtAttendanceDetails } from '../../utils/utils';
+import { getFilteredBatch, getFilteredDSTData, getFilteredIndustry, getFilteredTrades, getIndustryDetails, getITIsList, getOjtAttendanceDetails, getOptionsForOjtAttendance } from '../../utils/utils';
 import withUser from '../../redux/HOC/withUser';
 import { browserHistory } from 'react-router';
 
-const csvHeaders = [
-    { label: "District", key: "district" },
-    { label: "ITI Name", key: "iti.name" },
-    { label: "Batch", key: "batch" },
-    { label: "Trade", key: "trade" },
-    { label: "Industry", key: "industry.name" }
-];
-
 const ViewOJTAttendance = ({ goBack, user }) => {
     const [currentIti, setCurrentIti] = useState('');
-    const [trades, setTrades] = useState([]);
-    const [batches, setBatches] = useState([]);
-    const [filteredIndustries, setFilteredIndustries] = useState([]);
     const [selectedTrade, setSelectedTrade] = useState('');
     const [selectedBatch, setSelectedBatch] = useState('');
     const [selectedIndsutry, setSelectedIndsutry] = useState('');
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [nextDisabled, setNextDisabled] = useState(true);
+    const [options, setOptions] = useState({});
     const wrapperRef = useRef();
 
     const onBack = () => {
         onGoBack(goBack);
     };
 
-    const onTradesSelect = async (value) => {
-        const reqData = {
-            itiId: currentIti,
-            trade: value
-        };
-        setSelectedTrade(value);
-        setSelectedBatch("");
-        setSelectedIndsutry("");
-        const { data: { dst_mc_meeting } } = await getFilteredBatch(reqData);
-        const list = dst_mc_meeting.map((item) => item.batch).filter((item, index, self) => self.indexOf(item) === index);
-        setBatches(list);
-    };
-
-    const onBatchSelect = async (value) => {
-        const reqData = {
-            itiId: currentIti,
-            trade: selectedTrade,
-            batch: value
-        };
-        setSelectedBatch(value);
-        setSelectedIndsutry('');
-        const { data: { dst_mc_meeting } } = await getFilteredIndustry(reqData);
-        const list = dst_mc_meeting.map((item) => item.industry).filter((item, index, self) => self.indexOf(item) === index);
-        setFilteredIndustries(list);
-    };
-
-    const onIndustrySelect = async (value) => {
-        const reqData = {
-            itiId: currentIti,
-            trade: selectedTrade,
-            batch: selectedBatch,
-            industryId: value
-        };
-        setSelectedIndsutry(value);
-    };
-
     const fetchITIsList = async () => {
         const data = await getITIsList();
         const currentITI = data.data.iti.find((item) => item.name == user?.user?.user?.username).id;
         setCurrentIti(currentITI);
-        fetchFilteredTrades(currentITI);
-    };
-
-
-    const fetchFilteredTrades = async (currentITI) => {
-        const reqData = {
-            itiId: currentITI
-        };
-        const { data: { dst_mc_meeting } } = await getFilteredTrades(reqData);
-        const list = dst_mc_meeting.map((item) => item.trade).filter((item, index, self) => self.indexOf(item) === index);
-        setTrades(list);
+        let res = await getOptionsForOjtAttendance(currentITI);
+        const optionsObj = {};
+        res.data.iti_industry_trade_batch_mapping.forEach(el => {
+            if (el.industry.attendances_aggregate.aggregate.count > 0)
+                if (!optionsObj[el.trade]) {
+                    optionsObj[el.trade] = {
+                        batches: [el.batch],
+                        industries: [{ id: el.industry.id, name: el.industry.name }]
+                    };
+                } else {
+                    optionsObj[el.trade].batches.push(el.batch);
+                    optionsObj[el.trade].industries.push({ id: el.industry.id, name: el.industry.name });
+                }
+        });
+        setOptions(optionsObj);
     };
 
     useEffect(() => {
@@ -126,11 +84,11 @@ const ViewOJTAttendance = ({ goBack, user }) => {
                         name="trade"
                         id="trade"
                         value={selectedTrade}
-                        onChange={(event) => { onTradesSelect(event.target.value); }}
+                        onChange={(event) => { setSelectedTrade(event.target.value); }}
                     >
                         <option >Select Trade</option>
                         {
-                            trades?.map((item) => <option key={item} value={item}>{item}</option>)
+                            Object.keys(options)?.map((item) => <option key={item} value={item}>{item}</option>)
                         }
                     </select>
                 </div>
@@ -140,11 +98,11 @@ const ViewOJTAttendance = ({ goBack, user }) => {
                         name="trade"
                         id="trade"
                         value={selectedBatch}
-                        onChange={(event) => { onBatchSelect(event.target.value); }}
+                        onChange={(event) => { setSelectedBatch(event.target.value); }}
                     >
                         <option >Select Batch</option>
                         {
-                            batches && batches.length > 0 && batches.map((item) => <option key={item} value={item}>{item}</option>)
+                            options[selectedTrade]?.batches?.map((item) => <option key={item} value={item}>{item}</option>)
                         }
                     </select>
                 </div>
@@ -153,11 +111,11 @@ const ViewOJTAttendance = ({ goBack, user }) => {
                     <select className="form-select appearance-none p-3 font-semibold text-gray-700 bg-white border-2 border-solid border-teal-800 w-full"
                         name="filteredIndustries" id="filteredIndustries"
                         value={selectedIndsutry}
-                        onChange={(event) => onIndustrySelect(event.target.value)}
+                        onChange={(event) => setSelectedIndsutry(event.target.value)}
                     >
                         <option value="">Select Industry</option>
                         {
-                            filteredIndustries && filteredIndustries.length > 0 && filteredIndustries.map((item) => <option key={item.name} value={item.id}>{item.name}</option>)
+                            options[selectedTrade]?.industries?.map((item) => <option key={item.name} value={item.id}>{item.name}</option>)
                         }
                     </select>
                 </div>

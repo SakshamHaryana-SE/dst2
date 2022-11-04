@@ -12,7 +12,7 @@ const ViewTraineeAttendance = () => {
     const [endDate, setEndDate] = useState("");
     const [error, setError] = useState("");
     const [attendanceData, setAttendanceData] = useState(null);
-    const [limit, setLimit] = useState(10);
+    const limit = 31;
     const page = useRef(0);
 
     useEffect(() => {
@@ -20,13 +20,13 @@ const ViewTraineeAttendance = () => {
     }, []);
 
     const getAttendance = async () => {
-        if (!userData || !startDate || !endDate) {
-            setError("Either the start or end date is missing");
+        if (!userData || !startDate) {
+            setError("Start Date is mandatory");
             setTimeout(() => {
                 setError("");
             }, 3000);
             return;
-        } else if (new Date(startDate) >= new Date(endDate)) {
+        } else if (new Date(startDate) >= new Date(endDate || '2100-12-31')) {
             setError("Start date must be earlier than the end date");
             setTimeout(() => {
                 setError("");
@@ -37,7 +37,7 @@ const ViewTraineeAttendance = () => {
         let attendanceData = await getTraineeAttendance({
             trainee_id: userData.id,
             start_date: startDate,
-            end_date: endDate,
+            end_date: endDate || '2100-12-31',
             limit: limit,
             offset: page.current * limit
         });
@@ -66,7 +66,7 @@ const ViewTraineeAttendance = () => {
 
     return (
         <>
-            <Header />
+            <Header onBackButton={() => browserHistory.goBack()} />
             <div className="m-10 text-xl font-bold text-teal-800 text-center">
                 <h2 className="header-text-color">DST Trainee Attendance</h2>
             </div>
@@ -81,14 +81,7 @@ const ViewTraineeAttendance = () => {
                         <input type="date" className='lg:w-full p-2 sm:mx-2 border border-teal-700 rounded-lg' onChange={e => setEndDate(e.target.value)} />
                     </div>
                 </div>
-                <select className='w-[90%] lg:w-[70%] p-3 border border-teal-800 rounded-lg mt-8' onChange={e => setLimit(Number(e.target.value))}>
-                    <option value={10} selected disabled>No of entries</option>
-                    <option value={10}>10</option>
-                    <option value={30}>30</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                </select>
-                <div className={`hover:cursor-pointer transition ease-in-out delay-150 w-[90%] lg:w-[70%] bg-teal-800 text-white font-bold rounded-md p-3 m-8 ${(!startDate || !endDate) && 'opacity-60'}`}
+                <div className={`hover:cursor-pointer transition ease-in-out delay-150 w-[90%] lg:w-[70%] bg-teal-800 text-white font-bold rounded-md p-3 m-8 ${(!startDate) && 'opacity-60'}`}
                     onClick={() => {
                         page.current = 0;
                         getAttendance();
