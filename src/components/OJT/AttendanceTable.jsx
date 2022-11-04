@@ -67,7 +67,7 @@ const AttendanceTable = ({ attendanceRecord, name }) => {
                     })}
                     className='bg-teal-800 px-4 py-2 text-white flex items-center text-lg my-8 cursor-pointer hover:bg-teal-900 hover:rounded-lg ease-in-out duration-200'
                     headers={csvHeaders}
-                    filename={`Attendance-${name}`}>
+                    filename={`Attendance-${name}.csv`}>
                     <span>
                         Export &nbsp;
                     </span>

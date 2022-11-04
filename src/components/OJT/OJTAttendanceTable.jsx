@@ -126,7 +126,7 @@ const OJTAttendanceTable = (props) => {
                     })}
                     className='bg-teal-800 px-4 py-2 lg:mr-20 mr-2 text-white flex items-center text-lg my-8 cursor-pointer hover:bg-teal-900 hover:rounded-lg ease-in-out duration-200'
                     headers={csvHeaders}
-                    filename={`Batch ${batch}-${tradeName}-${fromDt}-to-${toDt}`}>
+                    filename={`Batch ${batch}-${tradeName}-${fromDt}-to-${toDt}.csv`}>
                     <span>
                         Export &nbsp;
                     </span>

@@ -104,7 +104,6 @@ const ViewDstMc = ({ goBack, user }) => {
           <p className='text-lg font-semibold py-2'>District: {modalData.district}</p>
           <p className='text-lg font-semibold py-2'>Latitue: {modalData.latitude}</p>
           <p className='text-lg font-semibold py-2'>Longitude: {modalData.longitude}</p>
-          <p className='text-lg font-semibold py-2'>ID: {modalData.id}</p>
         </div>
       </CommonModal>}
       <Header title="View DST MC" onBackButton={() => browserHistory.goBack()} />
@@ -195,7 +194,7 @@ const ViewDstMc = ({ goBack, user }) => {
           data={tableData}
           className='bg-teal-800 px-4 py-2 text-white flex items-center text-lg mr-[5%] my-8 cursor-pointer hover:bg-teal-900 hover:rounded-lg ease-in-out duration-200'
           headers={csvHeaders}
-          filename={`${selectedTrade}_${selectedBatch}_${filteredIndustries.filter(el => el.id == selectedIndsutry)[0].name || ""}`}>
+          filename={`${selectedTrade}_${selectedBatch}_${filteredIndustries.filter(el => el.id == selectedIndsutry)[0].name || ""}.csv`}>
           <span>
             Export &nbsp;
           </span>
